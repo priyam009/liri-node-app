@@ -3,9 +3,10 @@ require("dotenv").config();
 var keys = require("./keys.js");
 var axios = require("axios");
 var moment = require("moment");
+var fs = require("fs");
 
 var infoType = process.argv[2];
-var name = process.argv[3] ? process.argv.slice(3).join(" "):null;
+var name = process.argv[3] ? process.argv.slice(3).join(" ") : null;
 
 switch (infoType) {
   case "concert-this":
@@ -17,11 +18,7 @@ switch (infoType) {
     break;
 
   case "movie-this":
-    console.log("name", name);
-    if(name == null) {
-      name == "Mr. Nobody";
-      movie(name);
-    }
+    movie(name);
     break;
 
   case "do-what-it-says":
@@ -30,6 +27,7 @@ switch (infoType) {
 }
 
 function concert(artist) {
+  console.log("artist", artist);
   var concertUrl =
     "https://rest.bandsintown.com/artists/" +
     artist +
@@ -70,16 +68,16 @@ function concert(artist) {
 }
 
 function movie(movieName) {
+  if (movieName === null) {
+    movieName = "Mr. Nobody";
+  }
 
-    // console.log("movieName", movieName);
-    
-    var movieUrl = "http://www.omdbapi.com/?apikey=trilogy&t=" + movieName;
-    
-    axios
+  var movieUrl = "http://www.omdbapi.com/?apikey=trilogy&t=" + movieName;
+
+  axios
     .get(movieUrl)
     .then(function(response) {
-      
-      console.log('\n');
+      console.log("\n");
       console.log("Movie Title: " + response.data.Title);
       console.log("Movie Year: " + response.data.Year);
       console.log("Imdb Rating: " + response.data.imdbRating);
@@ -88,8 +86,7 @@ function movie(movieName) {
       console.log("Language: " + response.data.Language);
       console.log("Plot: " + response.data.Plot);
       console.log("Actors: " + response.data.Actors);
-      console.log('\n');
-      
+      console.log("\n");
     })
     .catch(function(error) {
       if (error.response) {
@@ -101,4 +98,32 @@ function movie(movieName) {
       }
       console.log(error.config);
     });
+}
+
+function doit() {
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+      console.log(error);
+    }
+
+    var data = data.split(",");
+    var infoType = data[0];
+    var name = data[1].split('"');
+    name = name[1];
+
+    switch (infoType) {
+      case "spotify-this-song":
+        spotify(name);
+        break;
+
+      case "movie-this":
+        movie(name);
+        break;
+
+      case "concert-this":
+        console.log(name);
+        concert(name);
+        break;
+    }
+  });
 }
