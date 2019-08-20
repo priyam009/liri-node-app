@@ -5,6 +5,12 @@ var axios = require("axios");
 var moment = require("moment");
 var fs = require("fs");
 
+var Spotify = require('node-spotify-api');
+
+var spotify = new Spotify(keys.spotify);
+
+console.log(spotify);
+
 var infoType = process.argv[2];
 var name = process.argv[3] ? process.argv.slice(3).join(" ") : null;
 
@@ -14,7 +20,7 @@ switch (infoType) {
     break;
 
   case "spotify-this-song":
-    spotify(name);
+    song(name);
     break;
 
   case "movie-this":
@@ -113,7 +119,7 @@ function doit() {
 
     switch (infoType) {
       case "spotify-this-song":
-        spotify(name);
+        song(name);
         break;
 
       case "movie-this":
@@ -125,5 +131,25 @@ function doit() {
         concert(name);
         break;
     }
+  });
+}
+
+function song(name) {
+  spotify
+  .search({ type: 'track', query: name })
+  .then(function(response) {
+
+    console.log("Artists: " + response.tracks.items[0].artists[0].name);
+
+    console.log("Song Name: " + response.tracks.items[0].name);
+
+    console.log("Spotify Link: " + response.tracks.items[0].artists[0].external_urls.spotify);
+
+    // console.log(JSON.stringify(response.tracks, null, 2));
+
+
+  })
+  .catch(function(err) {
+    console.log(err);
   });
 }
