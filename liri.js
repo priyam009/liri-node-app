@@ -73,6 +73,29 @@ function concert(artist) {
     });
 }
 
+function song(songName) {
+  if (songName === null) {
+    songName = "The Sign Ace of Base";
+  }
+
+  spotify
+  .search({ type: 'track', query: songName, limit: 1})
+  .then(function(response) {
+
+    console.log("Artists: " + response.tracks.items[0].artists[0].name);
+
+    console.log("Song Name: " + response.tracks.items[0].name);
+
+    console.log("Spotify Link: " + response.tracks.items[0].artists[0].external_urls.spotify);
+
+    console.log("Album: " + response.tracks.items[0].album.name);
+
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
+}
+
 function movie(movieName) {
   if (movieName === null) {
     movieName = "Mr. Nobody";
@@ -134,22 +157,3 @@ function doit() {
   });
 }
 
-function song(name) {
-  spotify
-  .search({ type: 'track', query: name })
-  .then(function(response) {
-
-    console.log("Artists: " + response.tracks.items[0].artists[0].name);
-
-    console.log("Song Name: " + response.tracks.items[0].name);
-
-    console.log("Spotify Link: " + response.tracks.items[0].artists[0].external_urls.spotify);
-
-    // console.log(JSON.stringify(response.tracks, null, 2));
-
-
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
-}
