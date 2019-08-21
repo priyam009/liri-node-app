@@ -1,0 +1,21 @@
+{
+  "Movie Title": "The Lion King",
+  "Movie Year: ": "1994",
+  "Imdb Rating: ": "8.5",
+  "Rotten Tomatoes Rating: ": "93%",
+  "Country: ": "USA",
+  "Language: ": "English, Swahili, Xhosa, Zulu",
+  "Plot: ": "A Lion cub crown prince is tricked by a treacherous uncle into thinking he caused his father's death and flees into exile in despair, only to learn in adulthood his identity and his responsibilities.",
+  "Actors: ": "Rowan Atkinson, Matthew Broderick, Niketa Calame-Harris, Jim Cummings"
+}
+{
+  "Artist": "ed sheeran",
+  "Venue Name": "Chantry Park",
+  "Venue Location": "United Kingdom",
+  "Date": "08/25/2019"
+}
+{
+  "Artists": "Metallica",
+  "Song Name": "Nothing Else Matters",
+  "Album": "Metallica"
+}

@@ -9,7 +9,7 @@ var Spotify = require('node-spotify-api');
 
 var spotify = new Spotify(keys.spotify);
 
-console.log(spotify);
+var logText = {};
 
 var infoType = process.argv[2];
 var name = process.argv[3] ? process.argv.slice(3).join(" ") : null;
@@ -52,6 +52,15 @@ function concert(artist) {
 
           console.log("Date: " + date + "\n");
           console.log("----------------");
+
+          logText = {
+            "Artist" : artist,
+            "Venue Name" : response.data[i].venue.name,
+            "Venue Location" : response.data[i].venue.country,
+            "Date" : date
+          }
+          logData(logText);
+          
         } else {
           break;
         }
@@ -59,6 +68,11 @@ function concert(artist) {
 
       if (response.data.length == 0) {
         console.log("\n" + "There are no concerts for this artist!" + "\n");
+
+        logText = {
+          artist : "There are no concerts for this artist!"
+        }
+        logData(logText);
       }
     })
     .catch(function(error) {
@@ -76,6 +90,7 @@ function concert(artist) {
 function song(songName) {
   if (songName === null) {
     songName = "The Sign Ace of Base";
+
   }
 
   spotify
@@ -89,6 +104,14 @@ function song(songName) {
     console.log("Spotify Link: " + response.tracks.items[0].artists[0].external_urls.spotify);
 
     console.log("Album: " + response.tracks.items[0].album.name);
+
+    logText = {
+      "Artists" : response.tracks.items[0].artists[0].name,
+      "Song Name" : response.tracks.items[0].name,
+      "Album" : response.tracks.items[0].album.name
+    }
+
+    logData(logText);
 
   })
   .catch(function(err) {
@@ -106,6 +129,7 @@ function movie(movieName) {
   axios
     .get(movieUrl)
     .then(function(response) {
+
       console.log("\n");
       console.log("Movie Title: " + response.data.Title);
       console.log("Movie Year: " + response.data.Year);
@@ -116,6 +140,18 @@ function movie(movieName) {
       console.log("Plot: " + response.data.Plot);
       console.log("Actors: " + response.data.Actors);
       console.log("\n");
+
+      logText = {
+        "Movie Title" : response.data.Title,
+        "Movie Year: " : response.data.Year,
+        "Imdb Rating: " : response.data.imdbRating,
+        "Rotten Tomatoes Rating: " : response.data.Ratings[1].Value,
+        "Country: " : response.data.Country,
+        "Language: " : response.data.Language,
+        "Plot: " : response.data.Plot,
+        "Actors: " : response.data.Actors
+      }
+      logData(logText);
     })
     .catch(function(error) {
       if (error.response) {
@@ -150,10 +186,19 @@ function doit() {
         break;
 
       case "concert-this":
-        console.log(name);
         concert(name);
         break;
     }
   });
+}
+
+function logData(logText) {
+  fs.appendFile("log.txt", JSON.stringify(logText, null, 2) + '\n', function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Content Added!");
+    }
+  })
 }
 
