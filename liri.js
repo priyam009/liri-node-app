@@ -5,7 +5,7 @@ var axios = require("axios");
 var moment = require("moment");
 var fs = require("fs");
 
-var Spotify = require('node-spotify-api');
+var Spotify = require("node-spotify-api");
 
 var spotify = new Spotify(keys.spotify);
 
@@ -33,7 +33,6 @@ switch (infoType) {
 }
 
 function concert(artist) {
-  console.log("artist", artist);
   var concertUrl =
     "https://rest.bandsintown.com/artists/" +
     artist +
@@ -42,23 +41,30 @@ function concert(artist) {
   axios
     .get(concertUrl)
     .then(function(response) {
-      for (var i = 0; i < response.data.length; i++) {
-        var dateTime = response.data[i].datetime.split("T");
+
+      var jsonData = response.data;
+
+      for (var i = 0; i < jsonData.length; i++) {
+        var dateTime = jsonData[i].datetime.split("T");
         var date = moment(dateTime[i], "YYYY-MM-DD").format("MM/DD/YYYY");
 
         if (i < 3 && date !== "Invalid date") {
-          console.log("\n" + "Venue Name: " + response.data[i].venue.name);
-          console.log("Venue Location: " + response.data[i].venue.country);
+          console.log("\n-------------\n");
 
-          console.log("Date: " + date + "\n");
-          console.log("----------------");
+          console.log("artist", artist);
+          console.log("Venue Name: " + jsonData[i].venue.name);
+          console.log("Venue Location: " + jsonData[i].venue.country);
+          console.log("Date: " + date);
 
-          logText = {
-            "Artist" : artist,
-            "Venue Name" : response.data[i].venue.name,
-            "Venue Location" : response.data[i].venue.country,
-            "Date" : date
-          }
+          console.log("\n-------------\n");
+
+          logText = [
+            "Artist: " + artist,
+            "Venue Name: " + jsonData[i].venue.name,
+            "Venue Location: " + jsonData[i].venue.country,
+            "Date: " + date
+          ].join("\n");
+
           logData(logText);
           
         } else {
@@ -67,11 +73,9 @@ function concert(artist) {
       }
 
       if (response.data.length == 0) {
-        console.log("\n" + "There are no concerts for this artist!" + "\n");
+        console.log("\n" + "There are no concerts for this " + artist + "!" + "\n");
 
-        logText = {
-          artist : "There are no concerts for this artist!"
-        }
+        logText = "There are no concerts for this " + artist + "!";
         logData(logText);
       }
     })
@@ -90,33 +94,40 @@ function concert(artist) {
 function song(songName) {
   if (songName === null) {
     songName = "The Sign Ace of Base";
-
   }
 
   spotify
-  .search({ type: 'track', query: songName, limit: 1})
-  .then(function(response) {
+    .search({ type: "track", query: songName, limit: 1 })
+    .then(function(response) {
 
-    console.log("Artists: " + response.tracks.items[0].artists[0].name);
+      var jsonData = response.tracks;
 
-    console.log("Song Name: " + response.tracks.items[0].name);
+      console.log("\n-------------\n");
 
-    console.log("Spotify Link: " + response.tracks.items[0].artists[0].external_urls.spotify);
+      console.log("Artists: " + jsonData.items[0].artists[0].name);
 
-    console.log("Album: " + response.tracks.items[0].album.name);
+      console.log("Song Name: " + jsonData.items[0].name);
 
-    logText = {
-      "Artists" : response.tracks.items[0].artists[0].name,
-      "Song Name" : response.tracks.items[0].name,
-      "Album" : response.tracks.items[0].album.name
-    }
+      console.log(
+        "Spotify Link: " +
+        jsonData.items[0].artists[0].external_urls.spotify
+      );
 
-    logData(logText);
+      console.log("Album: " + jsonData.items[0].album.name);
 
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
+      console.log("\n-------------\n");
+
+      logText = [
+        "Artists: " + jsonData.items[0].artists[0].name,
+        "Song Name: " + jsonData.items[0].name,
+        "Album: " + jsonData.items[0].album.name
+      ].join("\n");
+
+      logData(logText);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
 }
 
 function movie(movieName) {
@@ -130,27 +141,32 @@ function movie(movieName) {
     .get(movieUrl)
     .then(function(response) {
 
-      console.log("\n");
-      console.log("Movie Title: " + response.data.Title);
-      console.log("Movie Year: " + response.data.Year);
-      console.log("Imdb Rating: " + response.data.imdbRating);
-      console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
-      console.log("Country: " + response.data.Country);
-      console.log("Language: " + response.data.Language);
-      console.log("Plot: " + response.data.Plot);
-      console.log("Actors: " + response.data.Actors);
-      console.log("\n");
+      var jsonData = response.data;
+      
+      console.log("\n-------------\n");
 
-      logText = {
-        "Movie Title" : response.data.Title,
-        "Movie Year: " : response.data.Year,
-        "Imdb Rating: " : response.data.imdbRating,
-        "Rotten Tomatoes Rating: " : response.data.Ratings[1].Value,
-        "Country: " : response.data.Country,
-        "Language: " : response.data.Language,
-        "Plot: " : response.data.Plot,
-        "Actors: " : response.data.Actors
-      }
+      console.log("Movie Title: " + jsonData.Title);
+      console.log("Movie Year: " + jsonData.Year);
+      console.log("Imdb Rating: " + jsonData.imdbRating);
+      console.log("Rotten Tomatoes Rating: " + jsonData.Ratings[1].Value);
+      console.log("Country: " + jsonData.Country);
+      console.log("Language: " + jsonData.Language);
+      console.log("Plot: " + jsonData.Plot);
+      console.log("Actors: " + jsonData.Actors);
+
+      console.log("\n-------------\n");
+
+      logText = [
+        "Movie Title: " + jsonData.Title,
+        "Movie Year: " + jsonData.Year,
+        "Imdb Rating: " + jsonData.imdbRating,
+        "Rotten Tomatoes Rating: " + jsonData.Ratings[1].Value,
+        "Country: " + jsonData.Country,
+        "Language: " + jsonData.Language,
+        "Plot: " + jsonData.Plot,
+        "Actors: " + jsonData.Actors
+      ].join("\n");
+
       logData(logText);
     })
     .catch(function(error) {
@@ -193,12 +209,14 @@ function doit() {
 }
 
 function logData(logText) {
-  fs.appendFile("log.txt", JSON.stringify(logText, null, 2) + '\n', function(err) {
+  var divider = "\n--------------------------------\n";
+  fs.appendFile("log.txt", logText + divider, function(
+    err
+  ) {
     if (err) {
       console.log(err);
     } else {
       console.log("Content Added!");
     }
-  })
+  });
 }
-
