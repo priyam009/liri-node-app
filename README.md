@@ -75,7 +75,7 @@ All the output is logged in "log.txt" file.
 
 ## 4. Demo-
 
-* ![LIRI-NODE-APP Demo](video/liri-node-app.gif)
+* ![LIRI-NODE-APP Demo](video/liri.gif)
 
 ## 5. Technologies used-
 
