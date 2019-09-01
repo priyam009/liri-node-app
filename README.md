@@ -36,7 +36,7 @@ There are specified commands you need to use to run the app and are as follows,
 * Song URL link
 * Album name
 
-### * Bans in Town
+### * Bands in Town
 
 **Search Artist/Band-**
  *node liri.js concert-this <artist/band name here>*
@@ -73,18 +73,18 @@ This will be either of Spotify, Bands in Town or Omdb as described above
 
 All the output is logged in "log.txt" file.
 
-## 4. Demo-
+## 4. Demo
 
-* ![LIRI-NODE-APP Demo](video/liri.gif)
+![LIRI-NODE-APP Demo](video/liri.gif)
 
-## 5. Technologies used-
+## 5. Technologies used
 
 ### APIs-
 * Bands in town
 * OMDB
 * Spotify
 
-###Packages dependencies-
+### Packages dependencies-
 
 * **Axios**
 Axios is used to call and get information from the api. Used specifically for OMDB and Bands in Town.
@@ -101,6 +101,6 @@ Moment npm package is included to format the date as DD/MM/YYYY in bands in town
 * **dotenv**
 dotenv npm package is included to hide the spotify keys from being public.
 
-## 6. Role-
+## 6. Role
 
 This app is completely developed by me.
